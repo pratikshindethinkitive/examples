@@ -9,8 +9,8 @@ execution:
 - executor: jmeter
   scenario: BlazeDemo-Http
   concurrency: 20
-  ramp-up: 1m
-  hold-for: 2m
+  ramp-up: 0
+  hold-for: 10s
 
 scenarios:
   BlazeDemo-Http:
@@ -125,3 +125,6 @@ scenarios:
             label: 'https://blazedemo.com/assets/bootstrap-table.js'
             headers:
               Accept: '*/*'
+              
+settings:
+  artifacts-dir: artifacts/%Y-%m-%d_%H-%M-%S.%f              
