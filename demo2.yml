@@ -4,86 +4,124 @@
 modules:
   nose:
     ignore-unknown-actions: true
+
 execution:
-  - executor: selenium
-    scenario: BlazeDemo-Selenium
-    iterations: 1
-    capabilities:
-      browserName: chrome
+- executor: jmeter
+  scenario: BlazeDemo-Http
+  concurrency: 20
+  ramp-up: 1m
+  hold-for: 2m
+
 scenarios:
-  BlazeDemo-Selenium:
-    generate-flow-markers: true
-    headless: false
-    timeout: 60s
-    think-time: 0s
+  BlazeDemo-Http:
+    headers:
+      sec-ch-ua: '".Not/A)Brand";v="99", "Google Chrome";v="103", "Chromium";v="103"'
+      sec-ch-ua-mobile: '?0'
+      sec-ch-ua-platform: '"Windows"'
+      User-Agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
     requests:
-      - label: Landing Page
-        actions:
-          - type: resizeWindow
-            param: '1536,745'
-          - type: go
-            param: 'https://blazedemo.com/'
-      - label: Find Flights
-        actions:
-          - type: click
-            locators:
-              - Name: toPort
-              - CSS: 'select[name="toPort"]'
-              - XPath: "//select[@name='toPort']"
-              - XPath: '//select[2]'
-            metadata:
-              page-title: BlazeDemo
-              page-url: 'https://blazedemo.com/'
-              screenshot: 'data:image/png;base64,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'
-          - type: select
-            locators:
-              - Name: toPort
-              - CSS: 'select[name="toPort"]'
-              - XPath: "//select[@name='toPort']"
-              - XPath: '//select[2]'
-            param: Berlin
-            metadata:
-              page-title: BlazeDemo
-              page-url: 'https://blazedemo.com/'
-              screenshot: 'data:image/png;base64,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'
-          - type: click
-            locators:
-              - CSS: input.btn.btn-primary
-              - XPath: "//input[@value='Find Flights']"
-              - XPath: //input
-            metadata:
-              page-title: BlazeDemo
-              page-url: 'https://blazedemo.com/'
-              screenshot: 'data:image/png;base64,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'
-      - label: Choose This Flight
-        actions:
-          - type: click
-            locators:
-              - XPath: "(//input[@value='Choose This Flight'])[4]"
-              - XPath: '//tr[4]/td/input'
-            metadata:
-              page-title: BlazeDemo - reserve
-              page-url: 'https://blazedemo.com/reserve.php'
-              screenshot: 'data:image/png;base64,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'
-      - label: Purchase Flight
-        actions:
-          - type: click
-            locators:
-              - ID: rememberMe
-              - Name: rememberMe
-              - CSS: '#rememberMe'
-              - XPath: "//input[@id='rememberMe']"
-              - XPath: //label/input
-            metadata:
-              page-title: BlazeDemo Purchase
-              page-url: 'https://blazedemo.com/purchase.php'
-              screenshot: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAApCAYAAACoYAD2AAAAAXNSR0IArs4c6QAAAxJJREFUWEftmV1IU2EYx/9zm7ovp2aK36UikvQhRCb2RUUXUlAgkkWQRRB0F11kEEFSFyJIHxSUXUR0kaHYF/RxIZl1YyvEsFlq6fzaXJ65k5vbznbiPTmYCzznbCcbcQ6cu/c872//5/k/73POFCzLsojxSyFDSpQhWUmJhISspKykVApIFUeuSVnJpRSYdHhxr9uOLjONnx6/YLHSDGoc2JiCqvXJSNGp+J+j+9B+4yG6h63i+2Tj0wnc6rThu90Df4B/r+CKeJUCuSvi0XK8AFuKDVApFUs/THXj2ulmvFWXiofc2zSA530OQYCpOiWMWiWmHD64fb+HrZt1q3CoIg1JGqUgSPOaOvGQOy7147WZ5pVQo1bgTFUWKosNaOuZQVvPD8zM+dF8OA9Ht65EMl/KF5QcLDv19yCPVKbh7L4sFGUk4JHJgXOtoxi0eWIHcnuJAQ3VuSgv1GGaZlD/wIIO0wzo+UBsQBLlmmrzsWetkSuJC+1juNs1zcGSqhSb7pc2ZXTpzk5RoygjEX0WF1dvxCiXa/JwcHMqjFoVrryY4u4RuweBhZcUsZARuTtoHAJ4fn8OKor0XEsi6Ty2LR0nd6UjM1mNDhOFix3j+GRxgQlpVWIho3I3SevthZ43QXnxZoBGeaEeq9MTYPo2h/pWC95+oeFhFr/niYWMyt2kxewsNaKhOgfrcrVwewNIVMfB6vQtMkp4r1pWSLJ5OKiXYf8wyj+HDAft7Hfi+ivrIqPEBGQQdEO+DuOUF6Q+Q40SMaRvFmNDFrj12eJbUPXVr3jykQJJbehF5gXSZvg+h9w5UYCaTanQJ/Kc3SHBRU/m99/Zubobsnp4z+/wBbtLk9BYm8cZTRnHMwVFA0nNMegddcE86ca8V/islqRVoSxfi5JMDTTxcaJ+oGglSXTGz8LlDSAQPEYEbEnmRwInRsFg2IggBTBJukSGlEpOWUlZSakUkCrO/12Ty/mnhWglg3CmkVk8653Gh1EnnG4/WN7RIvLki4IkgOR+/NmGlvcTGKYYMFBBAeHDQiSovwDuAySb1Wt10gAAAABJRU5ErkJggg=='
-          - type: click
-            locators:
-              - CSS: input.btn.btn-primary
-              - XPath: "//input[@value='Purchase Flight']"
-              - XPath: '//div[11]/div/input'
-            metadata:
-              page-title: BlazeDemo Purchase
-              page-url: 'https://blazedemo.com/purchase.php'
-              screenshot: 'data:image/png;base64,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'
+      - transaction: Landing Page
+        force-parent-sample: false
+        do:
+          - url: 'https://blazedemo.com/'
+            method: GET
+            label: 'https://blazedemo.com/'
+            think-time: 0ms
+            headers:
+              Upgrade-Insecure-Requests: '1'
+              Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+          - url: 'https://blazedemo.com/assets/bootstrap.min.js'
+            method: GET
+            label: 'https://blazedemo.com/assets/bootstrap.min.js'
+            headers:
+              Accept: '*/*'
+          - url: 'https://blazedemo.com/assets/bootstrap-table.js'
+            method: GET
+            label: 'https://blazedemo.com/assets/bootstrap-table.js'
+            headers:
+              Accept: '*/*'
+      - transaction: Find Flights
+        force-parent-sample: false
+        do:
+          - url: 'https://blazedemo.com/reserve.php'
+            method: POST
+            label: 'https://blazedemo.com/reserve.php'
+            think-time: 19821ms
+            headers:
+              Upgrade-Insecure-Requests: '1'
+              Content-Type: application/x-www-form-urlencoded
+              Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+            body:
+              fromPort: Paris
+              toPort: Berlin
+          - url: 'https://blazedemo.com/assets/bootstrap.min.js'
+            method: GET
+            label: 'https://blazedemo.com/assets/bootstrap.min.js'
+            headers:
+              Accept: '*/*'
+          - url: 'https://blazedemo.com/assets/bootstrap-table.js'
+            method: GET
+            label: 'https://blazedemo.com/assets/bootstrap-table.js'
+            headers:
+              Accept: '*/*'
+      - transaction: Choose This Flight
+        force-parent-sample: false
+        do:
+          - url: 'https://blazedemo.com/purchase.php'
+            method: POST
+            label: 'https://blazedemo.com/purchase.php'
+            think-time: 16658ms
+            headers:
+              Upgrade-Insecure-Requests: '1'
+              Content-Type: application/x-www-form-urlencoded
+              Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+            body:
+              airline: Virgin America
+              flight: '12'
+              fromPort: Paris
+              price: '765.32'
+              toPort: Berlin
+          - url: 'https://blazedemo.com/assets/bootstrap.min.js'
+            method: GET
+            label: 'https://blazedemo.com/assets/bootstrap.min.js'
+            headers:
+              Accept: '*/*'
+          - url: 'https://blazedemo.com/assets/bootstrap-table.js'
+            method: GET
+            label: 'https://blazedemo.com/assets/bootstrap-table.js'
+            headers:
+              Accept: '*/*'
+      - transaction: Purchase Flight
+        force-parent-sample: false
+        do:
+          - url: 'https://blazedemo.com/confirmation.php'
+            method: POST
+            label: 'https://blazedemo.com/confirmation.php'
+            think-time: 21268ms
+            headers:
+              Upgrade-Insecure-Requests: '1'
+              Content-Type: application/x-www-form-urlencoded
+              Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+            body:
+              _token: ''
+              address: ''
+              cardType: visa
+              city: ''
+              creditCardMonth: '11'
+              creditCardNumber: ''
+              creditCardYear: '2017'
+              inputName: ''
+              nameOnCard: ''
+              rememberMe: 'on'
+              state: ''
+              zipCode: ''
+          - url: 'https://blazedemo.com/assets/bootstrap.min.js'
+            method: GET
+            label: 'https://blazedemo.com/assets/bootstrap.min.js'
+            headers:
+              Accept: '*/*'
+          - url: 'https://blazedemo.com/assets/bootstrap-table.js'
+            method: GET
+            label: 'https://blazedemo.com/assets/bootstrap-table.js'
+            headers:
+              Accept: '*/*'
